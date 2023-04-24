@@ -1,5 +1,13 @@
 # 미션 - 숫자 야구
 
+
+## ❗️ Typescript 조건 
+- 외부라이브러리는 index.d.ts 파일을 만들어서 사용해야 한다.
+- 모든 파일은 TS로 작성해야 한다.
+- tsconfig.json 추가 설정 
+  - noImplicitAny : true
+  - strictNullChecks : true
+
 ## 🔍 진행 방식
 
 - 미션은 **기능 요구 사항, 프로그래밍 요구 사항, 과제 진행 요구 사항** 세 가지로 구성되어 있다.
