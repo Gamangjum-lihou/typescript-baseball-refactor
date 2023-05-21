@@ -1,11 +1,16 @@
 import InputView from './InputView';
 import OutputView from './OutputView';
-import Validator from '../Validator';
+import { INPUT_MESSAGE } from '../Constants/Message';
 
 type callback = (input: unknown) => void;
 
 interface IError extends Error {
   cause: string;
+}
+
+interface IprintHint {
+  ball: number;
+  strike: number;
 }
 
 const View = {
@@ -14,12 +19,28 @@ const View = {
   },
 
   readGameNumbers(callback: callback) {
-    InputView.readLine('숫자를 입력해주세요', callback);
+    InputView.readLine(`${INPUT_MESSAGE.game_number}`, callback);
+  },
+
+  readGameCommand(callback: callback) {
+    InputView.readLine(`${INPUT_MESSAGE.game_command}`, callback);
+  },
+
+  printHint(value: IprintHint) {
+    OutputView.printHint(value);
+  },
+
+  printSuccess() {
+    OutputView.printSuccess();
   },
 
   printError(error: IError) {
     OutputView.printError(error);
     OutputView.printGameEnd();
+  },
+
+  finishGame() {
+    OutputView.finishGame();
   },
 };
 
