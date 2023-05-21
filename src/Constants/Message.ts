@@ -21,9 +21,9 @@ const OUTPUT_MESSAGE = Object.freeze({
   error: (name: string, message: string, cause: string) =>
     `${name} : ${message}\n[CAUSE] : ${cause}`,
   noting: '낫싱',
-  ball_and_strike: (ball: string, strike: string) => `${ball}볼 ${strike}스트라이크`,
-  strike: (strike: string) => `${strike}스트라이크`,
-  ball: (ball: string) => `${ball}볼`,
+  ball_and_strike: (ball: number, strike: number) => `${ball}볼 ${strike}스트라이크`,
+  strike: (strike: number) => `${strike}스트라이크`,
+  ball: (ball: number) => `${ball}볼`,
 });
 
 export { ERROR_MESSAGE, INPUT_MESSAGE, OUTPUT_MESSAGE };
