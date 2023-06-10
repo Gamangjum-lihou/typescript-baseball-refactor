@@ -1,5 +1,12 @@
 # [미션 - 숫자 야구](https://github.com/woowacourse-precourse/javascript-baseball/)
 
+## 💎 Typescript로 미션 코드 작성하기
+
+### 📌 코드
+#### [✅ 강철원](https://github.com/Gamangjum-lihou/typescript-baseball-refactor/tree/ryan-dia)
+#### [✅ 신현호](https://github.com/Gamangjum-lihou/typescript-baseball-refactor/tree/swarvy)
+
+<br>
 
 ## ❗️ Typescript 조건 
 - 외부라이브러리는 index.d.ts 파일을 만들어서 사용해야 한다.
