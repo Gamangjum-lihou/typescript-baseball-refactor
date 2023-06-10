@@ -45,6 +45,10 @@ checkNumber(input: unknown) {
 - 함수의 반환 타입이 any인 경우 타입 아전성이 나빠진다. 따라서 any 타입을 반환하면 절대 안된다.
 - 강제로 타입 오류를 제거하는 방법은 any 말고 @ts-ignore 도 가능하다.
 
+---
+
+<br>
+
 # Item 42 모르는 타입의 값에는 any 대신 unknown을 사용하기
 
 - unknown은 any 대신 사용할 수 있는 안전한 타입이다. 어떠한 값이 있지만 그 타입을 알지 못하는 경우라면 unknown을 사용하면 된다.
@@ -151,3 +155,108 @@ emptyObject = [1, 2, 3]; // 배열
 let emptyObject: {} = null; // 오류 발생
 let emptyObject: {} = undefined; // 오류 발생
 ```
+
+---
+
+<br>
+
+# Item 14 타입 연산과 제너릭 사용으로 반복 줄이기 
+값의 형태에 해당하는 타입을 정의하고 싶을 때 따로 interface 만들 필요없이 typeof를 사용하면 된다. 
+
+```ts
+
+class BaseballController {
+  #view: typeof View;
+
+  #model: Model;
+
+  #validator: Validator;
+
+```
+```ts
+
+const View = {
+  printStart() {
+    OutputView.printStart();
+  },
+
+  readGameNumbers(callback: callback) {
+    InputView.readLine(`${INPUT_MESSAGE.game_number}`, callback);
+  },
+
+  readGameCommand(callback: callback) {
+    InputView.readLine(`${INPUT_MESSAGE.game_command}`, callback);
+  },
+
+  printHint(value: IprintHint) {
+    OutputView.printHint(value);
+  },
+
+  printSuccess() {
+    OutputView.printSuccess();
+  },
+
+  printError(error: IError) {
+    OutputView.printError(error);
+    OutputView.printGameEnd();
+  },
+
+  finishGame() {
+    OutputView.finishGame();
+  },
+};
+
+export default View;
+```
+
+<img width="424" alt="image" src="https://github.com/Gamangjum-lihou/typescript-baseball-refactor/assets/76567238/4a1a0d9c-61a1-442c-9e3b-5eb0461bc2fe">
+
+---
+
+<br>
+
+# Item 22 타입 좁히기 (아이템 22)
+타입 좁히기는 타입스크립트가 넓은 타입으로부터 좁은 타입으로 진행하는 과정을 말한다. 
+
+
+> before
+```ts
+
+type Ivalidator = typeof Validator & {
+  [key:string] : (input:unknown) => void;
+}
+
+
+#validator: Ivalidator;
+
+
+
+#hasErrorWhanCheckInput(numbers: string, inputName: string) {
+    try {
+      this.#validator[inputName](numbers);
+    } catch (error) {
+      return this.#handleError(error as ErrorWithCause);
+    }
+  }
+  
+
+```
+
+>after
+```ts
+
+  #validator: typeof Validator;
+
+  type inputName = 'checkGameNumbers' | 'checkGameCommand';
+  
+   #hasErrorWhanCheckInput(numbers: string, inputName: inputName) {
+    try {
+      this.#validator[inputName](numbers);
+    } catch (error) {
+      return this.#handleError(error as ErrorWithCause);
+    }
+  }
+
+```
+
+
