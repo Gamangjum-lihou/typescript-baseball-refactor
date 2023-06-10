@@ -1,4 +1,4 @@
-# 미션 - 숫자 야구
+# [미션 - 숫자 야구](https://github.com/woowacourse-precourse/javascript-baseball/)
 
 
 ## ❗️ Typescript 조건 
@@ -8,168 +8,443 @@
   - noImplicitAny : true
   - strictNullChecks : true
 
-## 🔍 진행 방식
 
-- 미션은 **기능 요구 사항, 프로그래밍 요구 사항, 과제 진행 요구 사항** 세 가지로 구성되어 있다.
-- 세 개의 요구 사항을 만족하기 위해 노력한다. 특히 기능을 구현하기 전에 기능 목록을 만들고, 기능 단위로 커밋 하는 방식으로 진행한다.
-- 기능 요구 사항에 기재되지 않은 내용은 스스로 판단하여 구현한다.
-
-## 📮 미션 제출 방법
-
-- 미션 구현을 완료한 후 GitHub을 통해 제출해야 한다.
-  - GitHub을 활용한 제출 방법은 [프리코스 과제 제출](https://github.com/woowacourse/woowacourse-docs/tree/master/precourse) 문서를 참고해
-    제출한다.
-- GitHub에 미션을 제출한 후 [우아한테크코스 지원](https://apply.techcourse.co.kr) 사이트에 접속하여 프리코스 과제를 제출한다.
-  - 자세한 방법은 [제출 가이드](https://github.com/woowacourse/woowacourse-docs/tree/master/precourse#제출-가이드) 참고
-  - **Pull Request만 보내고 지원 플랫폼에서 과제를 제출하지 않으면 최종 제출하지 않은 것으로 처리되니 주의한다.**
-
-## 🚨 과제 제출 전 체크 리스트 - 0점 방지
-
-- 기능 구현을 모두 정상적으로 했더라도 **요구 사항에 명시된 출력값 형식을 지키지 않을 경우 0점으로 처리**한다.
-- 기능 구현을 완료한 뒤 아래 가이드에 따라 테스트를 실행했을 때 모든 테스트가 성공하는지 확인한다.
-- **테스트가 실패할 경우 0점으로 처리**되므로, 반드시 확인 후 제출한다.
-
-### 테스트 실행 가이드
-
-- 테스트 패키지 설치를 위해 `Node.js` 버전 `14` 이상이 필요하다.
-- 다음 명령어를 입력해 패키지를 설치한다.
-
-```bash
-npm install
-```
-
-- 설치가 완료되었다면, 다음 명령어를 입력해 테스트를 실행한다.
-
-```bash
-npm test
-```
 
 ---
 
-## 🚀 기능 요구 사항
+<br>
 
-기본적으로 1부터 9까지 서로 다른 수로 이루어진 3자리의 수를 맞추는 게임이다.
+# 📚 Effective Typescript 적용 과제
 
-- 같은 수가 같은 자리에 있으면 스트라이크, 다른 자리에 있으면 볼, 같은 수가 전혀 없으면 낫싱이란 힌트를 얻고, 그 힌트를 이용해서 먼저 상대방(컴퓨터)의 수를 맞추면 승리한다.
-  - 예) 상대방(컴퓨터)의 수가 425일 때
-    - 123을 제시한 경우 : 1스트라이크
-    - 456을 제시한 경우 : 1볼 1스트라이크
-    - 789를 제시한 경우 : 낫싱
-- 위 숫자 야구 게임에서 상대방의 역할을 컴퓨터가 한다. 컴퓨터는 1에서 9까지 서로 다른 임의의 수 3개를 선택한다. 게임 플레이어는 컴퓨터가 생각하고 있는 서로 다른 3개의 숫자를 입력하고, 컴퓨터는 입력한 숫자에 대한
-  결과를 출력한다.
-- 이 같은 과정을 반복해 컴퓨터가 선택한 3개의 숫자를 모두 맞히면 게임이 종료된다.
-- 게임을 종료한 후 게임을 다시 시작하거나 완전히 종료할 수 있다.
-- 사용자가 잘못된 값을 입력한 경우 `throw`문을 사용해 예외를 발생시킨후 애플리케이션은 종료되어야 한다.
+#### 📌 목차
+#### [1️⃣ 신현호](#1%EF%B8%8F⃣-신현호-1)
+#### [2️⃣ 강철원]()
 
-### 입출력 요구 사항
+<br>
 
-#### 입력
+## 1️⃣ 신현호
 
-- 서로 다른 3자리의 수
-- 게임이 끝난 경우 재시작/종료를 구분하는 1과 2 중 하나의 수
+### 1. 타입 단언보다는 타입 선언을 사용하기 (아이템 9)
 
-#### 출력
+```js
+class Computer {
+  #number: number[];
 
-- 입력한 수에 대한 결과를 볼, 스트라이크 개수로 표시
-
+  constructor() {
+    this.#number = this.generate();
+    console.log(this.#number);
+  }
+  ...
+}
 ```
-1볼 1스트라이크
+```js
+class Player {
+  #numbers: number[];
+
+  #ballCounts: { strike: number; ball: number; };
+
+  storeNumber(numbers: number[]) {
+    this.#numbers = numbers;
+  }
+  ...
+}
 ```
+- 타입 표시를 위한 방법으로는 타입 선언과 타입 단언 두 가지 방법이 존재하나, 타입 단언이 꼭 필요한 경우가 아니라면, 안전성 체크도 되는 타입 선언을 사용하는것이 좋기때문에 타입 선언을 사용하였습니다.
+- 타입 단언은 타입 체커가 판단하는 타입보다 작성자인 내가 판단하는 타입이 더 정확할 때 의미가 있는데, 이 경우에는 해당되지 않는다고 생각했습니다.
 
-- 하나도 없는 경우
+### 2. 함수 표현식에 타입 적용하기 (아이템 12)
 
+```js
+readPlayerCommand(callback: Function) {
+  Console.readLine(GAME_MESSAGE.inGame, (input: string) => {
+    checkCorrectNumber(input);
+    callback(input);
+  });
+}
 ```
-낫싱
+- 해당 코드는 InputView 내부의 코드인데, 타입스크립트에서는 함수 문장과 함수 표현식을 구분합니다.
+- 타입스크립트에서 권장되는 사항은 함수 표현식을 사용하는 것 입니다. 왜냐하면 함수 매개변수부터 반환값까지 전체를 함수 타입으로 사용하여 재사용 할 수 있기 때문입니다.
+- 따라서 객체 내부 메소드로 선언한 readPlayerCommand, 그리고 이와 유사한 형태의 기능들을 모두 함수 표현식으로 바꾸어주는게 타입스크립트에서 권장하는 방법으로 보입니다.
+
+### 3. 추론 가능한 타입을 사용해 장황한 코드 방지하기 (아이템 19)
+
+```js
+export const GAME_MESSAGE = Object.freeze({
+  start: '숫자 야구 게임을 시작합니다.',
+  inGame: '숫자를 입력해주세요 : ',
+  end: '3개의 숫자를 모두 맞히셨습니다! 게임 종료',
+  option: '게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.',
+});
+
+export const ERROR_MESSAGE = Object.freeze({
+  invalidNumber: '[ERR] 유효하지 않은 입력입니다',
+  invalidCommand: '[ERR] 유효하지 않은 종료/재시작 입력입니다',
+});
 ```
+- 타입 스크립트를 먼저 접한 개발자가 가장 많이 하는건 모든 코드에 타입 구문을 넣는 것이나, 타입 체커가 있기 때문에 모든 변수에 타입을 선언하는건 비생산적입니다.
+- 타입 추론이 된다면 명시적 타입 구문은 필요하지 않습니다. 오히려 방해가 됩니다.
+- 타입스크립트는 더 복잡한 객체 또한 추론할 수 있기때문에 타입을 장황하게 모두 달아주는 것 보단 추론 가능한 타입을 사용하는게 좋습니다.
 
-- 3개의 숫자를 모두 맞힐 경우
 
+### 4. 한꺼번에 객체 생성하기 (아이템 23)
+
+```js
+class Computer {
+  #number: number[];
+
+  constructor() {
+    this.#number = this.generate();
+    console.log(this.#number);
+  }
+  ...
+}
 ```
-3스트라이크
-3개의 숫자를 모두 맞히셨습니다! 게임 종료
-```
+- 객체를 생성할 떄는 속성을 하나씩 추가하기보다는 여러 속성을 포함해서 한꺼번에 생성해야 타입 추론에 유리합니다.
+- 안전한 타입으로 속성을 추가하려면 객체 전개 `({...a, ...b})`를 사용하면 됩니다.
+- 조건부로 속성을 추가하고싶다면 ? 를 사용합시다.
 
-- 게임 시작 문구 출력
+### 5. 공개 API에 등장하는 모든 타입을 익스포트하기 (아이템 47)
 
-```
-숫자 야구 게임을 시작합니다.
-```
+```js
+declare module '@woowacourse/mission-utils' {
+  class Console {
+    static readLine(input: string, callback: Function): void;
+    static print(message: string): void;
+    static close(): void;
+  }
 
-#### 실행 결과 예시
-
-```
-숫자 야구 게임을 시작합니다.
-숫자를 입력해주세요 : 123
-1볼 1스트라이크
-숫자를 입력해주세요 : 145
-1볼
-숫자를 입력해주세요 : 671
-2볼
-숫자를 입력해주세요 : 216
-1스트라이크
-숫자를 입력해주세요 : 713
-3스트라이크
-3개의 숫자를 모두 맞히셨습니다! 게임 종료
-게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.
-1
-숫자를 입력해주세요 : 123
-1볼
-...
-```
-
----
-
-## 🎯 프로그래밍 요구 사항
-
-- Node.js 14 버전에서 실행 가능해야 한다. **Node.js 14에서 정상적으로 동작하지 않을 경우 0점 처리한다.**
-- 프로그램 실행의 시작점은 `App.js`의 `play` 메서드이다. 아래와 같이 프로그램을 실행시킬 수 있어야 한다.
-
-**예시**
-
-```javascript
-const app = new App();
-app.play();
-```
-
-- `package.json`을 변경할 수 없고 외부 라이브러리(jQuery, Lodash 등)를 사용하지 않는다. 순수 Vanilla JS로만 구현한다.
-- [JavaScript 코드 컨벤션](https://github.com/woowacourse/woowacourse-docs/tree/main/styleguide/javascript)을 지키면서 프로그래밍 한다
-- 프로그램 종료 시 `process.exit()`를 호출하지 않는다.
-- 프로그램 구현이 완료되면 `ApplicationTest`의 모든 테스트가 성공해야 한다. **테스트가 실패할 경우 0점 처리한다.**
-- 프로그래밍 요구 사항에서 달리 명시하지 않는 한 파일, 패키지 이름을 수정하거나 이동하지 않는다.
-
-### 추가된 요구 사항
-
-- indent(인덴트, 들여쓰기) depth를 3이 넘지 않도록 구현한다. 2까지만 허용한다.
-  - 예를 들어 while문 안에 if문이 있으면 들여쓰기는 2이다.
-  - 힌트: indent(인덴트, 들여쓰기) depth를 줄이는 좋은 방법은 함수(또는 메소드)를 분리하면 된다.
-- 함수(또는 메서드)가 한 가지 일만 하도록 최대한 작게 만들어라.
-- Jest를 이용하여 본인이 정리한 기능 목록이 정상 동작함을 테스트 코드로 확인한다.
-  - 테스트 도구 사용법이 익숙하지 않다면 `__tests__/StringTest.js`를 참고하여 학습한 후 테스트를 구현한다.
-
-### 라이브러리
-
-- [MissionUtils 라이브러리](https://github.com/woowacourse-projects/javascript-mission-utils#mission-utils)에서 제공하는 `Random` 및 `Console` API를 사용하여 구현해야 한다.
-  - Random 값 추출은 [MissionUtils 라이브러리](https://github.com/woowacourse-projects/javascript-mission-utils#mission-utils)의 `Random.pickNumberInRange()`를 활용한다.
-  - 사용자의 값을 입력 받고 출력하기 위해서는 [MissionUtils 라이브러리](https://github.com/woowacourse-projects/javascript-mission-utils#mission-utils)에서 제공하는 `Console.readLine`, `Console.print`를 활용한다.
-
-#### 사용 예시
-
-```javascript
-const computer = [];
-while (computer.length < 3) {
-  const number = MissionUtils.Random.pickNumberInRange(1, 9);
-  if (!computer.includes(number)) {
-    computer.push(number);
+  class Random {
+    static pickNumberInRange(start: number, end: number): number;
   }
 }
 ```
 
+- 타입스크립트를 사용하다보면 서드파티의 모듈에서 익스포트되지 않은 타입 정보가 필요한 경우가 생깁니다
+- 불필요한 any를 피하기 위해서라도 타입을 명시적으로 작성합시다.
+- 공개 api 매개변수에 놓이는 순간 탕팁은 노출되므로 숨기려하지말고 라이브러리 사용자를 위해 명시적으로 타입을 익스포트하는것이 좋습니다.
+
+### 6. 모던 자바스크립트로 작성하기 (1) (아이템 58)
+
+```js
+// 클래스
+class BaseBallController {
+  #computer: Computer;
+
+  #player: Player;
+
+  constructor() {
+    this.#player = new Player();
+  }
+
+  start = () => {
+    OutputView.printStart();
+    this.#computer = new Computer();
+    this.getPlayerCommand();
+  };
+  
+  ...
+}
+```
+```js
+// import, export
+import { Random } from "@woowacourse/mission-utils";
+export default Computer;
+```
+- 타입스크립트 컴파일러를 자바스크립트 트랜스파일러로 사용할 수 있습니다.
+- 타입스크립트는 자바스크립트의 상위집합이기때문에, 최신 버전의 자바스크립트 코드를 옛날 버전의 자바스크립트 코드로 변환할 수 있습니다.
+- 따라서 모던 자바스크립트 문법을 사용하는것을 권장합니다.
+- ECMAScript의 모듈, 프로토타입 대신 클래스, var 대신 let/const 등과 같은 요소들이 있습니다.
+
+### 7. 모던 자바스크립트로 작성하기 (2) (아이템 58)
+
+```js
+// 화살표 함수
+start = () => {
+  OutputView.printStart();
+  this.#computer = new Computer();
+  this.getPlayerCommand();
+};
+
+getPlayerCommand = () => {
+  InputView.readPlayerCommand(this.sendPlayerCommand);
+};
+
+sendPlayerCommand = (input: string) => {
+  this.#player.storeNumber(input.split('').map(Number));
+  this.playBall();
+};
+```
+- this 키워드는 일반적인 변수들과는 다른 스코프 규칙을 가지기때문에, 자바스크립트에서 가장 어려운 개념 중 하나입니다.
+- 화살표 함수를 사용하면 상위 스코프의 this를 유지할 수 있습니다.
+- 일반 함수보다 화살표 함수가 더 직관적이며 코드도 간결해지기 때문에 가급적 화살표 함수를 사용하는 것이 좋습니다.
+
 ---
 
-## ✏️ 과제 진행 요구 사항
+<br>
 
-- 미션은 [javascript-baseball](https://github.com/woowacourse-precourse/javascript-baseball/) 저장소를 Fork & Clone해 시작한다.
-- **기능을 구현하기 전 `docs/README.md`에 구현할 기능 목록을 정리**해 추가한다.
-- **Git의 커밋 단위는 앞 단계에서 `docs/README.md`에 정리한 기능 목록 단위**로 추가한다.
-  - [커밋 메시지 컨벤션](https://gist.github.com/stephenparish/9941e89d80e2bc58a153) 가이드를 참고해 커밋 메시지를 작성한다.
-- 과제 진행 및 제출 방법은 [프리코스 과제 제출](https://github.com/woowacourse/woowacourse-docs/tree/master/precourse) 문서를 참고한다.
+## 2️⃣ 강철원
+
+### 1. 타입스크립트 설정 이해하기 (Item 2)
+
+```ts
+"noImplicitAny": true /* Enable error reporting for expressions and declarations with an implied 'any' type. */,
+"strictNullChecks": true
+
+```
+
+- 타입스크립트 설정은 커맨드 라인을 이용하기보다는 tsconfig.json을 사용하는게 좋다.
+- 'undefined는 객체가 아닙니다' 같은 런타임 오류를 방지하기 위해 strictNullChecks를 설정하는 것이 좋다'
+- 자바스크립트 프로젝트를 타입스크립트로 전환하는 게 아니라면 noImplicitAny를 설정하는 것이 좋다
+
+### 2. any 타입은 가능한 한 좁은 범위에서만 사용하기 (Item 38)
+
+문맥상으로 x라는 변수가 동시에 Foo 타입과 Bar 타입에 할당 가능하다면, 오류를 제거하는 방법은 두 가지이다.
+
+```ts
+function f1() {
+  const x: any = expressionReturningFoo(); //  이렇게 x
+  processBar(x);
+}
+
+function f2() {
+  const x = expressionReturningFoo();
+  processBar(x as any); // 이게 더 좋음
+  // why? 다른 코드에 영향 x
+}
+```
+
+```ts
+checkNumber(input: unknown) {
+    if (/\D/.test(input as any)) {
+      throw new ValidationError(ERROR_MESSAGE.only_number);
+    }
+  },
+
+  checkLength(input: string) {
+    if (input.length !== 1) {
+      throw new ValidationError(ERROR_MESSAGE.length_one);
+    }
+  },
+```
+
+- 의도치 않은 타입 안전성의 손실을 피하기 위해 any의 사용 범위를 최소한으로 좁혀야 한다.
+- 함수의 반환 타입이 any인 경우 타입 아전성이 나빠진다. 따라서 any 타입을 반환하면 절대 안된다.
+- 강제로 타입 오류를 제거하는 방법은 any 말고 @ts-ignore 도 가능하다.
+
+---
+
+<br>
+
+### 3. 모르는 타입의 값에는 any 대신 unknown을 사용하기 (Item 42)
+
+- unknown은 any 대신 사용할 수 있는 안전한 타입이다. 어떠한 값이 있지만 그 타입을 알지 못하는 경우라면 unknown을 사용하면 된다.
+- unknown을 사용하려면 타입 단언문 or 타입체크를 해야한다.
+
+```ts
+
+class GameNumber {
+  #inputNumbers;
+
+  constructor(input: unknown) {
+    this.#inputNumbers = input;
+    this.#checkInput();
+  }
+
+  #checkInput() {
+    this.#checkNumber();
+    this.#checkZero();
+    this.#checkNumberOfDigits();
+    this.#checkDuplication();
+  }
+
+  #checkNumber() {
+    if (this.#isNotNumber()) throw new ValidationError(ERROR_MESSAGE.only_number);
+    this.#inputNumbers = Number(this.#inputNumbers);
+  }
+
+  #isNotNumber() {
+    return isNaN(Number(this.#inputNumbers));
+  }
+
+  #checkZero() {
+    if (this.#haveZero()) throw new ValidationError(ERROR_MESSAGE.not_zero);
+  }
+
+  #haveZero() {
+    if (typeof this.#inputNumbers === 'number') {
+      return [...this.#inputNumbers.toString()].includes('0');
+    }
+  }
+
+```
+
+```ts
+const GameCommand = {
+  checkGameCommand(input: unknown) {
+    this.checkNumber(input);
+    this.checkLength(input as string);
+    this.checkOneOrTwo(input as string);
+  },
+
+  checkNumber(input: unknown) {
+    if (/\D/.test(input as any)) {
+      throw new ValidationError(ERROR_MESSAGE.only_number);
+    }
+  },
+
+  checkLength(input: string) {
+    if (input.length !== 1) {
+      throw new ValidationError(ERROR_MESSAGE.length_one);
+    }
+  },
+
+  checkOneOrTwo(input: string) {
+    if (!/1|2/.test(input)) {
+      throw new ValidationError(ERROR_MESSAGE.one_or_two);
+    }
+  },
+};
+
+export default GameCommand;
+```
+
+- 추가 1
+  가끔 unknwon 대신 제너릭 매개변수가 사용되는 경우도 있다.
+
+```ts
+function safeParseYAML(yaml: string): unknown {
+  return parseYAML(yaml);
+}
+
+function safeParseYAML<T>(yaml: string): T {
+  return parseYAML(yaml);
+}
+```
+
+제너릭을 사용한 스타일은 타입 단언문과 달라 보이지만 기능적으로는 동일하다.
+제너릭보다는 unknown을 반환하고 사용자가 직접 단언문을 사용하거나 원하는 대로 타입을 좁히도록 강제하는 것이 좋다.
+
+- 추가 2
+
+{} 타입도 존재하는데 이는 unknown 보다는 범위가 약간 좁다.
+
+{} 타입은 null과 undefined를 제외한 모든 값을 포함한다.
+{} 타입은 unknown 타입이 도입되기 전에는 {}가 더 일반적으로 사용되었다. 최근사용은 드물다.
+
+```ts
+let emptyObject: {} = 123; // 숫자
+emptyObject = 'hello'; // 문자열
+emptyObject = [1, 2, 3]; // 배열
+```
+
+```ts
+let emptyObject: {} = null; // 오류 발생
+let emptyObject: {} = undefined; // 오류 발생
+```
+
+---
+
+<br>
+
+### 4. 타입 연산과 제너릭 사용으로 반복 줄이기  (Item 14)
+값의 형태에 해당하는 타입을 정의하고 싶을 때 따로 interface 만들 필요없이 typeof를 사용하면 된다. 
+
+```ts
+
+class BaseballController {
+  #view: typeof View;
+
+  #model: Model;
+
+  #validator: Validator;
+
+```
+```ts
+
+const View = {
+  printStart() {
+    OutputView.printStart();
+  },
+
+  readGameNumbers(callback: callback) {
+    InputView.readLine(`${INPUT_MESSAGE.game_number}`, callback);
+  },
+
+  readGameCommand(callback: callback) {
+    InputView.readLine(`${INPUT_MESSAGE.game_command}`, callback);
+  },
+
+  printHint(value: IprintHint) {
+    OutputView.printHint(value);
+  },
+
+  printSuccess() {
+    OutputView.printSuccess();
+  },
+
+  printError(error: IError) {
+    OutputView.printError(error);
+    OutputView.printGameEnd();
+  },
+
+  finishGame() {
+    OutputView.finishGame();
+  },
+};
+
+export default View;
+```
+
+<img width="424" alt="image" src="https://github.com/Gamangjum-lihou/typescript-baseball-refactor/assets/76567238/4a1a0d9c-61a1-442c-9e3b-5eb0461bc2fe">
+
+---
+
+<br>
+
+### 5.타입 좁히기 (Item 22)
+타입 좁히기는 타입스크립트가 넓은 타입으로부터 좁은 타입으로 진행하는 과정을 말한다. 
+
+
+> before
+```ts
+
+type Ivalidator = typeof Validator & {
+  [key:string] : (input:unknown) => void;
+}
+
+
+#validator: Ivalidator;
+
+
+
+#hasErrorWhanCheckInput(numbers: string, inputName: string) {
+    try {
+      this.#validator[inputName](numbers);
+    } catch (error) {
+      return this.#handleError(error as ErrorWithCause);
+    }
+  }
+  
+
+```
+
+>after
+```ts
+
+  #validator: typeof Validator;
+
+  type inputName = 'checkGameNumbers' | 'checkGameCommand';
+  
+   #hasErrorWhanCheckInput(numbers: string, inputName: inputName) {
+    try {
+      this.#validator[inputName](numbers);
+    } catch (error) {
+      return this.#handleError(error as ErrorWithCause);
+    }
+  }
+
+```
+
+
+
+
