@@ -3,15 +3,15 @@ import GENERATOR from './Constants/System';
 
 const RandomNumberGenerator = {
   generateRandomNumber(): number[] {
-    const computer: number[] = [];
-    while (computer.length < GENERATOR.pick_number_end) {
+    const computer: Set<number> = new Set();
+    while (computer.size < GENERATOR.pick_count) {
       const number = Random.pickNumberInRange(
         GENERATOR.start_number,
         GENERATOR.end_number
       );
-      if (!computer.includes(number)) computer.push(number);
+      computer.add(number);
     }
-    return computer;
+    return [...computer];
   },
 };
 
